@@ -1,3 +1,3 @@
 # NestJS Fundamentals
 
-![Fundamentals Cat](./cat.jpg)
+![Fundamentals Cat](./cat.png)

@@ -1,3 +1,3 @@
 # NestJS Authentication & Authorization
 
-![Authentication & Authorization Cat](./cat.jpg)
+![Authentication & Authorization Cat](./cat.png)

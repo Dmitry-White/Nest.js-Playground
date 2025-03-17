@@ -1,3 +1,3 @@
 # NestJS Advanced Concepts
 
-![Advanced Concepts Cat](./cat.jpg)
+![Advanced Concepts Cat](./cat.png)

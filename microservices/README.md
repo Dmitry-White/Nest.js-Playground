@@ -1,3 +1,3 @@
 # NestJS Microservices
 
-![Microservices Cat](./cat.jpg)
+![Microservices Cat](./cat.png)
