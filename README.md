@@ -1,2 +1,9 @@
 # Nest.js-Playground
-Want some Angular in your backend 😉? Don't mind the cats 🐱, they're here to comfort those searching for Next.js 🤷‍♂️
+
+1. [NestJS Fundamentals](./fundementals/README.md)
+2. [NestJS GraphQL - Code-First Approach](./graphql-code-first/README.md)
+3. [NestJS GraphQL - Schema-First Approach](./graphql-schema-first/README.md)
+4. [NestJS Authentication & Authorization](./auth/README.md)
+5. [NestJS Architecture & Advanced Patterns](./architecture/README.md)
+6. [NestJS Microservices](./microservices/README.md)
+7. [NestJS Advanced](./advanced/README.md)
