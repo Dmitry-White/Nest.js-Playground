@@ -10,11 +10,11 @@ config();
 
 export default new DataSource({
   type: 'postgres',
-  host: process.env.POSTGRES_HOST,
-  port: +(process.env.POSTGRES_PORT || 5432),
-  database: process.env.POSTGRES_DATABASE,
-  username: process.env.POSTGRES_USERNAME,
-  password: process.env.POSTGRES_PASSWORD,
+  host: process.env.DB_HOST,
+  port: +(process.env.DB_PORT || 5432),
+  database: process.env.DB_DATABASE,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
   entities: [Coffee, Flavor],
   migrations: [CoffeeRefactor1743433758562, SchemaSync1743434418986],
 });
