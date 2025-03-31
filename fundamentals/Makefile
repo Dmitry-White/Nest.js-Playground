@@ -14,3 +14,9 @@ stop:
 
 list:
 	docker compose ps -a
+
+immigrate:
+	npx typeorm migration:run -d dist/typeorm-cli.config
+
+emigrate:
+	npx typeorm migration:revert -d dist/typeorm-cli.config
