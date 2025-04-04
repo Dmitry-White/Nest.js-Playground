@@ -9,6 +9,7 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { EnvironmentVariables } from './common/dto/environment.dto';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ApiKeyGuard } from './common/guards/api-key.guard';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { WrapResponseInterceptor } from './common/interceptors/wrap-response.interceptor';
 import { validateConfigWith } from './utils/validation';
 
@@ -59,6 +60,10 @@ import { validateConfigWith } from './utils/validation';
     {
       provide: APP_INTERCEPTOR,
       useClass: WrapResponseInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimeoutInterceptor,
     },
   ],
 })
