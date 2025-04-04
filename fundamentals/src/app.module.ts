@@ -12,11 +12,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { EnvironmentVariables } from './common/dto/environment.dto';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { ApiKeyGuard } from './common/guards/api-key.guard';
-import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
-import { WrapResponseInterceptor } from './common/interceptors/wrap-response.interceptor';
-import { LoggingMiddleware } from './common/middlewares/logging.middleware';
+import { HttpExceptionFilter } from './lib/filters/http-exception.filter';
+import { ApiKeyGuard } from './lib/guards/api-key.guard';
+import { TimeoutInterceptor } from './lib/interceptors/timeout.interceptor';
+import { WrapResponseInterceptor } from './lib/interceptors/wrap-response.interceptor';
+import { LoggingMiddleware } from './lib/middlewares/logging.middleware';
 import { validateConfigWith } from './utils/validation';
 
 @Module({

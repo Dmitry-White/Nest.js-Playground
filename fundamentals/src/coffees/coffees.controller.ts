@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '../lib/decorators/public.decorator';
 
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
-import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
-import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { ParseIntPipe } from '../lib/pipes/parse-int.pipe';
+import { Protocol } from '../lib/decorators/protocol.decorator';
 
 @Controller('coffees')
 export class CoffeesController {
