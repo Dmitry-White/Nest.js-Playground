@@ -16,6 +16,7 @@ import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
+import { Protocol } from 'src/common/decorators/protocol.decorator';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -50,7 +51,8 @@ export class CoffeesController {
 
   @Public()
   @Get(':id/timeout')
-  timeout() {
-    return new Promise(resolve => setTimeout(resolve, 5000));
+  timeout(@Protocol() protocol) {
+    console.log(protocol);
+    return new Promise((resolve) => setTimeout(resolve, 5000));
   }
 }
