@@ -1,15 +1,16 @@
 import { Module, ValidationPipe } from '@nestjs/common';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { EnvironmentVariables } from './common/dto/environment.dto';
+import { IamModule } from './iam/iam.module';
+import { AccessTokenGuard } from './lib/guards/access-token.guard';
 import { UsersModule } from './users/users.module';
 import { validateConfigWith } from './utils/validation';
-import { IamModule } from './iam/iam.module';
-import { APP_PIPE } from '@nestjs/core';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
