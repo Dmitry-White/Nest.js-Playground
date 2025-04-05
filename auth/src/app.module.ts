@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -9,6 +9,7 @@ import { EnvironmentVariables } from './common/dto/environment.dto';
 import { UsersModule } from './users/users.module';
 import { validateConfigWith } from './utils/validation';
 import { IamModule } from './iam/iam.module';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -34,6 +35,20 @@ import { IamModule } from './iam/iam.module';
     IamModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useFactory: () =>
+        new ValidationPipe({
+          whitelist: true,
+          transform: true,
+          forbidNonWhitelisted: true,
+          transformOptions: {
+            enableImplicitConversion: true,
+          },
+        }),
+    },
+  ],
 })
 export class AppModule {}
