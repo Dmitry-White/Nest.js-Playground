@@ -5,16 +5,16 @@ import { SignUpDto } from './dto/sign-up.dto';
 
 @Controller('authentication')
 export class AuthenticationController {
-  constructor(private readonly AuthenticationService: AuthenticationService) {}
+  constructor(private readonly authenticationService: AuthenticationService) {}
 
   @Post('sign-up')
   signUp(@Body() signUpDto: SignUpDto) {
-    return this.AuthenticationService.signUp(signUpDto);
+    return this.authenticationService.signUp(signUpDto);
   }
 
   @HttpCode(HttpStatus.OK) // by default @Post does 201, we wanted 200 - hence using @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   signIn(@Body() signInDto: SignInDto) {
-    return this.AuthenticationService.signIn(signInDto);
+    return this.authenticationService.signIn(signInDto);
   }
 }
