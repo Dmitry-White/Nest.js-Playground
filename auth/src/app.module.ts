@@ -8,6 +8,7 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { EnvironmentVariables } from './common/dto/environment.dto';
 import { UsersModule } from './users/users.module';
 import { validateConfigWith } from './utils/validation';
+import { IamModule } from './iam/iam.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { validateConfigWith } from './utils/validation';
     }),
     CoffeesModule,
     UsersModule,
+    IamModule,
   ],
   controllers: [AppController],
   providers: [AppService],

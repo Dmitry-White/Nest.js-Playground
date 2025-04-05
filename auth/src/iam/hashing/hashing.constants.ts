@@ -1,0 +1,3 @@
+const HASHING_SERVICE = Symbol('HASHING_SERVICE');
+
+export { HASHING_SERVICE };
