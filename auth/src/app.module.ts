@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeesModule } from './coffees/coffees.module';
 import { EnvironmentVariables } from './common/dto/environment.dto';
 import { IamModule } from './iam/iam.module';
-import { AccessTokenGuard } from './lib/guards/access-token.guard';
 import { UsersModule } from './users/users.module';
 import { validateConfigWith } from './utils/validation';
 import { AppController } from './app.controller';

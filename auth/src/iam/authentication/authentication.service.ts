@@ -9,12 +9,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 
-import { PG_UNIQUE_VIOLATION_ERROR_CODE } from '../../common/constants/pg.constants';
-import { jwtConfig } from '../../common/config/jwt.config';
+import { User } from '../../users/entities/user.entity';
 import { HASHING_SERVICE } from '../hashing/hashing.constants';
 import { HashingProvider } from '../hashing/hashing.interface';
-import { User } from '../../users/entities/user.entity';
 
+import { jwtConfig } from './config/jwt.config';
+import { PG_UNIQUE_VIOLATION_ERROR_CODE } from './authentication.constants';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 
@@ -73,7 +73,7 @@ export class AuthenticationService {
       expiresIn: this.jwtConfiguration.accessTokenTtl,
     };
     const accessToken = await this.jwtService.signAsync(payload, options);
-    
+
     return {
       accessToken,
     };

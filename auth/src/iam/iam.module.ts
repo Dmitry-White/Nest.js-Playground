@@ -5,13 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
 import { User } from '../users/entities/user.entity';
-import { jwtConfig } from '../common/config/jwt.config';
-import { AccessTokenGuard } from '../lib/guards/access-token.guard';
+import { jwtConfig } from './authentication/config/jwt.config';
 
 import { HASHING_SERVICE } from './hashing/hashing.constants';
 import { HashingService } from './hashing/hashing.service';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
+import { AccessTokenGuard } from './authentication/guards/access-token.guard';
+import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 
 @Module({
   imports: [
@@ -25,9 +26,10 @@ import { AuthenticationService } from './authentication/authentication.service';
       provide: HASHING_SERVICE,
       useClass: HashingService,
     },
+    AccessTokenGuard,
     {
       provide: APP_GUARD,
-      useClass: AccessTokenGuard,
+      useClass: AuthenticationGuard,
     },
     AuthenticationService,
   ],
