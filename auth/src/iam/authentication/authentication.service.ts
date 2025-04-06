@@ -18,6 +18,7 @@ import { jwtConfig } from '../config/jwt.config';
 import { PG_UNIQUE_VIOLATION_ERROR_CODE } from './authentication.constants';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -63,20 +64,59 @@ export class AuthenticationService {
       throw new UnauthorizedException('Password does not match');
     }
 
-    const payload: UserData = {
-      sub: user.id,
-      email: user.email,
+    return await this.generateTokens(user);
+  }
+
+  async refreshTokens(refreshTokenDto: RefreshTokenDto) {
+    try {
+      const options = {
+        secret: this.jwtConfiguration.secret,
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+      };
+      const { sub } = await this.jwtService.verifyAsync<Pick<UserData, 'sub'>>(
+        refreshTokenDto.refreshToken,
+        options,
+      );
+
+      const user = await this.usersRepository.findOneByOrFail({
+        id: sub,
+      });
+
+      return this.generateTokens(user);
+    } catch (err) {
+      throw new UnauthorizedException();
+    }
+  }
+
+  private async generateTokens(user: User) {
+    const { accessTokenTtl, refreshTokenTtl } = this.jwtConfiguration;
+    const data = { email: user.email };
+
+    const [accessToken, refreshToken] = await Promise.all([
+      this.signToken<Partial<UserData>>(user.id, accessTokenTtl, data),
+      this.signToken(user.id, refreshTokenTtl),
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
     };
+  }
+
+  private async signToken<T>(userId: number, expiresIn: number, data?: T) {
+    const payload = {
+      sub: userId,
+      ...data,
+    };
+
     const options = {
       audience: this.jwtConfiguration.audience,
       issuer: this.jwtConfiguration.issuer,
       secret: this.jwtConfiguration.secret,
-      expiresIn: this.jwtConfiguration.accessTokenTtl,
+      expiresIn,
     };
-    const accessToken = await this.jwtService.signAsync(payload, options);
 
-    return {
-      accessToken,
-    };
+    return await this.jwtService.signAsync(payload, options);
   }
 }
