@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 
-import { JWT_CONFIG } from '../authentication.constants';
+import { JWT_CONFIG } from '../authentication/authentication.constants';
 
 const jwtConfig = registerAs(JWT_CONFIG, () => {
   return {

@@ -12,8 +12,9 @@ import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { HASHING_SERVICE } from '../hashing/hashing.constants';
 import { HashingProvider } from '../hashing/hashing.interface';
+import { UserData } from '../iam.interfaces';
+import { jwtConfig } from '../config/jwt.config';
 
-import { jwtConfig } from './config/jwt.config';
 import { PG_UNIQUE_VIOLATION_ERROR_CODE } from './authentication.constants';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
@@ -62,7 +63,7 @@ export class AuthenticationService {
       throw new UnauthorizedException('Password does not match');
     }
 
-    const payload = {
+    const payload: UserData = {
       sub: user.id,
       email: user.email,
     };
