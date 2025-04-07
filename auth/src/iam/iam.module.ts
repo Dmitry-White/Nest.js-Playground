@@ -6,8 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { User } from '../users/entities/user.entity';
 
-import { jwtConfig } from './config/jwt.config';
-import { cacheConfig } from './config/cache.config';
+import { jwtConfig } from './authentication/config/jwt.config';
+import { cacheConfig } from './authentication/config/cache.config';
 import { HASHING_SERVICE } from './hashing/hashing.constants';
 import { HashingService } from './hashing/hashing.service';
 import { AuthenticationController } from './authentication/authentication.controller';
