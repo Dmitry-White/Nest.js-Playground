@@ -1,7 +1,7 @@
 import { PermissionType } from './authorization/authorization.types';
 import { Role } from './authorization/enums/role.enum';
 
-interface UserData {
+type UserData = {
   /**
    * The "subject" of the token. The value of this property is the user ID
    * that granted this token.
@@ -22,6 +22,6 @@ interface UserData {
    * The subject's (user) permissions.
    */
   permissions: PermissionType[];
-}
+};
 
 export type { UserData };

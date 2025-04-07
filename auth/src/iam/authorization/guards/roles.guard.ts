@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 
 import { REQUEST_USER_KEY } from '../../authentication/authentication.constants';
-import { UserData } from '../../iam.interfaces';
+import { UserData } from '../../iam.types';
 
 import { ROLES_KEY } from '../authorization.constants';
 import { Role } from '../enums/role.enum';

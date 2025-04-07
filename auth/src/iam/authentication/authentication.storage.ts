@@ -30,7 +30,7 @@ export class AuthenticationStorage
 
   async insert(userId: number, tokenId: string): Promise<void> {
     const key = this.getKey(userId);
-    
+
     await this.redisClient.set(key, tokenId);
   }
 

@@ -13,7 +13,7 @@ import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { HASHING_SERVICE } from '../hashing/hashing.constants';
 import { HashingProvider } from '../hashing/hashing.interface';
-import { UserData } from '../iam.interfaces';
+import { UserData } from '../iam.types';
 import { jwtConfig } from './config/jwt.config';
 
 import { PG_UNIQUE_VIOLATION_ERROR_CODE } from './authentication.constants';

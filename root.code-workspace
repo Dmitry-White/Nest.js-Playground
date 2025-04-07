@@ -1,0 +1,13 @@
+{
+    "folders": [
+      { "path": "." },
+      { "path": "./advanced" },
+      { "path": "./architecture" },
+      { "path": "./auth" },
+      { "path": "./fundamentals" },
+      { "path": "./graphql-code-first" },
+      { "path": "./graphql-schema-first" },
+      { "path": "./microservices" },
+    ],
+    "settings": {}
+  }
