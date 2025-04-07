@@ -7,16 +7,19 @@ import { JwtModule } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 
 import { jwtConfig } from './config/jwt.config';
+import { cacheConfig } from './config/cache.config';
 import { HASHING_SERVICE } from './hashing/hashing.constants';
 import { HashingService } from './hashing/hashing.service';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
+import { AuthenticationStorage } from './authentication/authentication.storage';
 
 @Module({
   imports: [
     ConfigModule.forFeature(jwtConfig),
+    ConfigModule.forFeature(cacheConfig),
     TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
@@ -32,6 +35,7 @@ import { AuthenticationGuard } from './authentication/guards/authentication.guar
       useClass: AuthenticationGuard,
     },
     AuthenticationService,
+    AuthenticationStorage,
   ],
   exports: [
     {

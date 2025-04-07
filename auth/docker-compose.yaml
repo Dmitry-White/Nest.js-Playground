@@ -6,3 +6,9 @@ services:
       - ${DB_PORT}:${DB_PORT}
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - ${CACHE_PORT}:${CACHE_PORT}
