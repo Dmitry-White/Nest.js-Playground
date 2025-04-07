@@ -17,6 +17,9 @@ import { AuthenticationGuard } from './authentication/guards/authentication.guar
 import { AuthenticationStorage } from './authentication/authentication.storage';
 import { RolesGuard } from './authorization/guards/roles.guard';
 import { PermissionsGuard } from './authorization/guards/permissions.guard';
+import { PoliciesGuard } from './authorization/guards/policy.guard';
+import { AuthorizationHandlerStorage } from './authorization/authorization.storage';
+import { FrameworkContributorPolicyHandler } from './authorization/policies/framework-contributor.policy';
 
 @Module({
   imports: [
@@ -44,8 +47,14 @@ import { PermissionsGuard } from './authorization/guards/permissions.guard';
       provide: APP_GUARD,
       useClass: PermissionsGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: PoliciesGuard,
+    },
     AuthenticationService,
     AuthenticationStorage,
+    AuthorizationHandlerStorage,
+    FrameworkContributorPolicyHandler,
   ],
   exports: [
     {

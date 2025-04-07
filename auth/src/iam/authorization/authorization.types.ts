@@ -6,4 +6,8 @@ const Permission = {
 
 type PermissionType = CoffeesPermission;
 
-export { Permission, PermissionType };
+type Policy = {
+  name: string;
+};
+
+export { Permission, PermissionType, Policy };

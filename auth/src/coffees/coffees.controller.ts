@@ -12,8 +12,10 @@ import { Permissions } from '../iam/authorization/decorators/permissions.decorat
 import { Permission } from '../iam/authorization/authorization.types';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { Role } from '../iam/authorization/enums/role.enum';
+import { Policies } from '../iam/authorization/decorators/policy.decorator';
+import { FrameworkContributorPolicy } from '../iam/authorization/policies/framework-contributor.policy';
 import { ActiveUser } from '../iam/decorators/active-user.decorator';
-import { UserData } from '../iam/iam.interfaces';
+import { UserData } from '../iam/iam.types';
 
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
@@ -46,6 +48,7 @@ export class CoffeesController {
     return this.coffeesService.update(+id, updateCoffeeDto);
   }
 
+  @Policies(new FrameworkContributorPolicy())
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.coffeesService.remove(+id);
