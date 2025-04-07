@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 
 import { AuthenticationType } from '../enums/authentication.enums';
-import { AUTHENTICATION_TYPE_KEY } from '../decorators/authentication.decorator';
+import { AUTHENTICATION_TYPE_KEY } from '../authentication.constants';
 
 import { AccessTokenGuard } from './access-token.guard';
 

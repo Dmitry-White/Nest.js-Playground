@@ -8,6 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { Roles } from '../iam/authorization/decorators/roles.decorator';
+import { Role } from '../iam/authorization/enums/role.enum';
 import { ActiveUser } from '../iam/decorators/active-user.decorator';
 import { UserData } from '../iam/iam.interfaces';
 
@@ -19,6 +21,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}
 
+  @Roles(Role.Admin)
   @Post()
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
     return this.coffeesService.create(createCoffeeDto);
@@ -26,7 +29,7 @@ export class CoffeesController {
 
   @Get()
   findAll(@ActiveUser() user: UserData) {
-    console.log(user)
+    console.log(user);
     return this.coffeesService.findAll();
   }
 

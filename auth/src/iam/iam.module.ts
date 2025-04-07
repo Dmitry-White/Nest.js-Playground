@@ -15,6 +15,7 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 import { AuthenticationStorage } from './authentication/authentication.storage';
+import { RolesGuard } from './authorization/guards/roles.guards';
 
 @Module({
   imports: [
@@ -33,6 +34,10 @@ import { AuthenticationStorage } from './authentication/authentication.storage';
     {
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     AuthenticationService,
     AuthenticationStorage,
