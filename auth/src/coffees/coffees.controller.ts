@@ -8,6 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { Permissions } from '../iam/authorization/decorators/permissions.decorator';
+import { Permission } from '../iam/authorization/authorization.types';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { Role } from '../iam/authorization/enums/role.enum';
 import { ActiveUser } from '../iam/decorators/active-user.decorator';
@@ -38,6 +40,7 @@ export class CoffeesController {
     return this.coffeesService.findOne(+id);
   }
 
+  @Permissions(Permission.UpdateCoffee)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
     return this.coffeesService.update(+id, updateCoffeeDto);

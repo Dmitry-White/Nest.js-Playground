@@ -100,10 +100,10 @@ export class AuthenticationService {
     }
   }
 
-  private async generateTokens({ id, email, role }: User) {
+  private async generateTokens({ id, email, role, permissions }: User) {
     const refreshTokenId = randomUUID();
     const { accessTokenTtl, refreshTokenTtl } = this.jwtConfiguration;
-    const accessTokenData = { email, role };
+    const accessTokenData = { email, role, permissions };
     const refreshTokenData = {
       refreshTokenId,
     };
