@@ -45,7 +45,9 @@ export class AuthenticationService {
 
       await this.usersRepository.save(user);
     } catch (err) {
-      if (err.code === PG_UNIQUE_VIOLATION_ERROR_CODE) {
+      if (
+        (err as Record<string, string>).code === PG_UNIQUE_VIOLATION_ERROR_CODE
+      ) {
         throw new ConflictException();
       }
       throw err;

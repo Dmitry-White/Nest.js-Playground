@@ -10,6 +10,7 @@ import { AuthenticationType } from '../enums/authentication.enums';
 import { AUTHENTICATION_TYPE_KEY } from '../authentication.constants';
 
 import { AccessTokenGuard } from './access-token.guard';
+import { ApiKeyGuard } from './api-keys.guard';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -22,9 +23,11 @@ export class AuthenticationGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly accessTokenGuard: AccessTokenGuard,
+    private readonly apiKeyGuard: ApiKeyGuard,
   ) {
     this.authTypeGuardMap = {
       [AuthenticationType.Bearer]: this.accessTokenGuard,
+      [AuthenticationType.ApiKey]: this.apiKeyGuard,
       [AuthenticationType.None]: { canActivate: () => true },
     };
   }

@@ -15,6 +15,8 @@ import { Role } from '../iam/authorization/enums/role.enum';
 import { Policies } from '../iam/authorization/decorators/policy.decorator';
 import { FrameworkContributorPolicy } from '../iam/authorization/policies/framework-contributor.policy';
 import { ActiveUser } from '../iam/decorators/active-user.decorator';
+import { Authentication } from '../iam/authentication/decorators/authentication.decorator';
+import { AuthenticationType } from '../iam/authentication/enums/authentication.enums';
 import { UserData } from '../iam/iam.types';
 
 import { CoffeesService } from './coffees.service';
@@ -37,6 +39,7 @@ export class CoffeesController {
     return this.coffeesService.findAll();
   }
 
+  @Authentication(AuthenticationType.Bearer, AuthenticationType.ApiKey)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.coffeesService.findOne(+id);
