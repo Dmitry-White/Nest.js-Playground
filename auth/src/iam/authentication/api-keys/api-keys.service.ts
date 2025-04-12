@@ -8,7 +8,7 @@ import { HASHING_SERVICE } from '../../../iam/hashing/hashing.constants';
 import { AuthenticationEncoding } from '../enums/authentication.enums';
 import { ApiKey } from '../entities/api-key.entity';
 
-import { GeneratedApiKeyPayload } from './api-keys.types';
+import { ApiKeyPayload } from './api-keys.types';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ApiKeysService {
     private readonly apiKeysRepository: Repository<ApiKey>,
   ) {}
 
-  async create(id: number): Promise<GeneratedApiKeyPayload> {
+  async create(id: number): Promise<ApiKeyPayload> {
     const uuid = this.generateApiKey(id);
     const hashedKey = await this.hashingService.hash(uuid);
 

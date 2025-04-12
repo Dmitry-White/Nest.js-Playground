@@ -4,9 +4,10 @@
 
 Available Authentication methods:
 
-- Access & Refresh Token (JWT)
-- API Key Token (Hashed UUID)
-- Cookie (Access Token)
+- Access & Refresh Token (JWT & Redis)
+- API Key Token (Hashed Base64 UUID)
+- Cookie (Access Token, HTTP-Only)
+- 2FA (OTP)
 
 Available Authorization methods:
 

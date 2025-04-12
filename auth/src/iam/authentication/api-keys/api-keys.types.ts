@@ -1,5 +1,5 @@
-type GeneratedApiKeyPayload = {
+type ApiKeyPayload = {
   apiKey: string;
 };
 
-export { GeneratedApiKeyPayload };
+export { ApiKeyPayload };
