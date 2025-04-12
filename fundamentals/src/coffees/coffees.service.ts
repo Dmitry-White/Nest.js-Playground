@@ -24,7 +24,7 @@ export class CoffeesService {
     private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
   ) {
-    const coffeesConfig = this.configService.get(COFFEES_CONFIG);
+    const coffeesConfig = this.configService.getOrThrow(COFFEES_CONFIG);
     console.log(coffeesConfig);
   }
 
