@@ -1,9 +1,7 @@
-import { IsEmail, MinLength } from 'class-validator';
+import { IsNumberString } from 'class-validator';
+import { OtpDto } from './otp.dto';
 
-export class SignInDto {
-  @IsEmail()
-  email: string;
-
-  @MinLength(10)
-  password: string;
+export class SignInDto extends OtpDto {
+  @IsNumberString()
+  code: string;
 }

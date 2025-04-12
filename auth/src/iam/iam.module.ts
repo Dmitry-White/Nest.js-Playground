@@ -23,6 +23,7 @@ import { FrameworkContributorPolicyHandler } from './authorization/policies/fram
 import { ApiKey } from './authentication/entities/api-key.entity';
 import { ApiKeyGuard } from './authentication/guards/api-keys.guard';
 import { ApiKeysService } from './authentication/api-keys/api-keys.service';
+import { OtpService } from './authentication/otp/otp.service';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { ApiKeysService } from './authentication/api-keys/api-keys.service';
     AuthorizationHandlerStorage,
     FrameworkContributorPolicyHandler,
     ApiKeysService,
+    OtpService,
   ],
   exports: [
     {

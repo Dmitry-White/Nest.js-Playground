@@ -14,15 +14,18 @@ import { User } from '../../users/entities/user.entity';
 import { HASHING_SERVICE } from '../hashing/hashing.constants';
 import { HashingProvider } from '../hashing/hashing.interface';
 import { UserData } from '../iam.types';
-import { jwtConfig } from './config/jwt.config';
 
-import { PG_UNIQUE_VIOLATION_ERROR_CODE } from './authentication.constants';
+import { jwtConfig } from './config/jwt.config';
+import { OtpDto } from './dto/otp.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { AuthenticationStorage } from './authentication.storage';
 import { ApiKeysService } from './api-keys/api-keys.service';
-import { GeneratedApiKeyPayload } from './api-keys/api-keys.types';
+import { ApiKeyPayload } from './api-keys/api-keys.types';
+import { OtpService } from './otp/otp.service';
+import { PG_UNIQUE_VIOLATION_ERROR_CODE } from './authentication.constants';
+import { AuthenticationStorage } from './authentication.storage';
+import { TokenData } from './authentication.types';
 
 @Injectable()
 export class AuthenticationService {
@@ -39,9 +42,11 @@ export class AuthenticationService {
     private readonly authenticationStorage: AuthenticationStorage,
 
     private readonly apiKeyService: ApiKeysService,
+
+    private readonly otpService: OtpService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: SignUpDto): Promise<void> {
     try {
       const user = new User();
       user.email = signUpDto.email;
@@ -58,25 +63,22 @@ export class AuthenticationService {
     }
   }
 
-  async signIn(signInDto: SignInDto) {
-    const user = await this.usersRepository.findOneBy({
-      email: signInDto.email,
-    });
-    if (!user) {
-      throw new UnauthorizedException('User does not exists');
+  async signIn(signInDto: SignInDto): Promise<TokenData> {
+    const user = await this.getUser(signInDto);
+
+    if (!user.is2FAEnabled) {
+      return await this.generateTokens(user);
     }
-    const isEqual = await this.hashingService.compare(
-      signInDto.password,
-      user.password,
-    );
-    if (!isEqual) {
-      throw new UnauthorizedException('Password does not match');
+
+    const isValid = this.otpService.verifyCode(signInDto.code, user.secret2FA);
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid 2FA code');
     }
 
     return await this.generateTokens(user);
   }
 
-  async refreshTokens(refreshTokenDto: RefreshTokenDto) {
+  async refreshTokens(refreshTokenDto: RefreshTokenDto): Promise<TokenData> {
     try {
       const options = {
         secret: this.jwtConfiguration.secret,
@@ -86,6 +88,7 @@ export class AuthenticationService {
       const { sub, refreshTokenId } = await this.jwtService.verifyAsync<
         Pick<UserData, 'sub'> & { refreshTokenId: string }
       >(refreshTokenDto.refreshToken, options);
+
       const user = await this.usersRepository.findOneByOrFail({
         id: sub,
       });
@@ -106,7 +109,7 @@ export class AuthenticationService {
     }
   }
 
-  async apiKey(signInDto: SignInDto): Promise<GeneratedApiKeyPayload> {
+  async apiKey(signInDto: SignInDto): Promise<ApiKeyPayload> {
     const user = await this.usersRepository.findOneBy({
       email: signInDto.email,
     });
@@ -119,7 +122,38 @@ export class AuthenticationService {
     return apiKey;
   }
 
-  private async generateTokens({ id, email, role, permissions }: User) {
+  async generate2FA(otpDto: OtpDto): Promise<string> {
+    const user = await this.getUser(otpDto);
+
+    const { secret, uri } = await this.otpService.generateSecret(user.email);
+
+    await this.otpService.enableTfaForUser(user, secret);
+
+    return uri;
+  }
+
+  private async getUser({ email, password }: OtpDto): Promise<User> {
+    const user = await this.usersRepository.findOneBy({
+      email: email,
+    });
+    if (!user) {
+      throw new UnauthorizedException('User does not exists');
+    }
+
+    const isEqual = await this.hashingService.compare(password, user.password);
+    if (!isEqual) {
+      throw new UnauthorizedException('Password does not match');
+    }
+
+    return user;
+  }
+
+  private async generateTokens({
+    id,
+    email,
+    role,
+    permissions,
+  }: User): Promise<TokenData> {
     const refreshTokenId = randomUUID();
     const { accessTokenTtl, refreshTokenTtl } = this.jwtConfiguration;
     const accessTokenData = { email, role, permissions };
@@ -140,7 +174,11 @@ export class AuthenticationService {
     };
   }
 
-  private async signToken<T>(userId: number, expiresIn: number, data?: T) {
+  private async signToken<T>(
+    userId: number,
+    expiresIn: number,
+    data?: T,
+  ): Promise<string> {
     const payload = {
       sub: userId,
       ...data,
