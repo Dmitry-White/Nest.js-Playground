@@ -13,7 +13,7 @@ import { UserData } from '../../../iam/iam.types';
 import { extractFromAuthHeader } from '../../../utils/request';
 
 import { jwtConfig } from '../config/jwt.config';
-import { REQUEST_USER_KEY } from '../authentication.constants';
+import { USER_KEY } from '../authentication.constants';
 import { AuthenticationType } from '../enums/authentication.enums';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class AccessTokenGuard implements CanActivate {
         token,
         this.jwtConfiguration,
       );
-      request[REQUEST_USER_KEY] = payload;
+      request[USER_KEY] = payload;
     } catch {
       throw new UnauthorizedException();
     }

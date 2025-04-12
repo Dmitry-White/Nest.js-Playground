@@ -10,7 +10,7 @@ import { UserData } from '../../../iam/iam.types';
 import { extractFromAuthHeader } from '../../../utils/request';
 
 import { ApiKeysService } from '../api-keys/api-keys.service';
-import { REQUEST_USER_KEY } from '../authentication.constants';
+import { USER_KEY } from '../authentication.constants';
 import { AuthenticationType } from '../enums/authentication.enums';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class ApiKeyGuard implements CanActivate {
         role: apiKeyEntity.user.role,
         permissions: apiKeyEntity.user.permissions,
       };
-      request[REQUEST_USER_KEY] = payload;
+      request[USER_KEY] = payload;
     } catch {
       throw new UnauthorizedException();
     }

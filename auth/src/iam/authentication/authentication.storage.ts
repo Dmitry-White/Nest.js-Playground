@@ -17,7 +17,7 @@ export class AuthenticationStorage
   private cacheConfig: RedisOptions;
 
   constructor(private readonly configService: ConfigService) {
-    this.cacheConfig = this.configService.get(CACHE_CONFIG, {});
+    this.cacheConfig = this.configService.getOrThrow(CACHE_CONFIG);
   }
 
   onApplicationBootstrap() {

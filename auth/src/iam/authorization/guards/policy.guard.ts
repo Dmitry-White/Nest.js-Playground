@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { REQUEST_USER_KEY } from '../../authentication/authentication.constants';
+import { USER_KEY } from '../../authentication/authentication.constants';
 import { UserData } from '../../iam.types';
 import { AuthorizationHandlerStorage } from '../authorization.storage';
 import { Policy } from '../authorization.types';
@@ -29,9 +29,7 @@ export class PoliciesGuard implements CanActivate {
       return true;
     }
 
-    const user: UserData = context.switchToHttp().getRequest()[
-      REQUEST_USER_KEY
-    ];
+    const user: UserData = context.switchToHttp().getRequest()[USER_KEY];
 
     try {
       await Promise.all(
