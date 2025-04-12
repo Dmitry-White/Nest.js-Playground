@@ -33,13 +33,14 @@ export class CoffeesController {
     return this.coffeesService.create(createCoffeeDto);
   }
 
+  @Authentication(AuthenticationType.ApiKey)
   @Get()
   findAll(@ActiveUser() user: UserData) {
     console.log(user);
     return this.coffeesService.findAll();
   }
 
-  @Authentication(AuthenticationType.Bearer, AuthenticationType.ApiKey)
+  @Authentication(AuthenticationType.Bearer)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.coffeesService.findOne(+id);

@@ -5,37 +5,27 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 import { UserData } from '../../../iam/iam.types';
+import { extractFromAuthHeader } from '../../../utils/request';
+
 import { ApiKeysService } from '../api-keys/api-keys.service';
-import { ApiKey } from '../entities/api-key.entity';
 import { REQUEST_USER_KEY } from '../authentication.constants';
+import { AuthenticationType } from '../enums/authentication.enums';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  constructor(
-    private readonly apiKeysService: ApiKeysService,
-
-    @InjectRepository(ApiKey)
-    private readonly apiKeysRepository: Repository<ApiKey>,
-  ) {}
+  constructor(private readonly apiKeysService: ApiKeysService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    const apiKey = this.extractKeyFromHeader(request);
+    const apiKey = extractFromAuthHeader(request, AuthenticationType.ApiKey);
     if (!apiKey) {
       throw new UnauthorizedException();
     }
 
-    const apiKeyEntityId = this.apiKeysService.extract(apiKey);
-
     try {
-      const apiKeyEntity = await this.apiKeysRepository.findOne({
-        where: { uuid: apiKeyEntityId },
-        relations: { user: true },
-      });
+      const apiKeyEntity = await this.apiKeysService.read(apiKey);
       if (!apiKeyEntity) {
         throw new UnauthorizedException();
       }
@@ -53,10 +43,5 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     return true;
-  }
-
-  private extractKeyFromHeader(request: Request): string | undefined {
-    const [type, key] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'ApiKey' ? key : undefined;
   }
 }

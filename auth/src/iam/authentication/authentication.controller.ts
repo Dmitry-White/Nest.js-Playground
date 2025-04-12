@@ -1,5 +1,6 @@
 import { Res } from '@nestjs/common';
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Response } from 'express';
 
 import { AuthenticationService } from './authentication.service';
 import { Authentication } from './decorators/authentication.decorator';
@@ -28,7 +29,7 @@ export class AuthenticationController {
   @Post('sign-in-cookie')
   async signInCookie(
     @Body() signInDto: SignInDto,
-    @Res({ passthrough: true }) response,
+    @Res({ passthrough: true }) response: Response,
   ) {
     const accessToken = await this.authenticationService.signIn(signInDto);
     response.cookie('accessToken', accessToken, {
@@ -42,5 +43,10 @@ export class AuthenticationController {
   @Post('refresh-tokens')
   refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.authenticationService.refreshTokens(refreshTokenDto);
+  }
+
+  @Post('api-key')
+  apiKey(@Body() signInDto: SignInDto) {
+    return this.authenticationService.apiKey(signInDto);
   }
 }

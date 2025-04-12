@@ -21,6 +21,8 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { AuthenticationStorage } from './authentication.storage';
+import { ApiKeysService } from './api-keys/api-keys.service';
+import { GeneratedApiKeyPayload } from './api-keys/api-keys.types';
 
 @Injectable()
 export class AuthenticationService {
@@ -35,6 +37,8 @@ export class AuthenticationService {
 
     private readonly jwtService: JwtService,
     private readonly authenticationStorage: AuthenticationStorage,
+
+    private readonly apiKeyService: ApiKeysService,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -100,6 +104,19 @@ export class AuthenticationService {
     } catch (err) {
       throw new UnauthorizedException(err);
     }
+  }
+
+  async apiKey(signInDto: SignInDto): Promise<GeneratedApiKeyPayload> {
+    const user = await this.usersRepository.findOneBy({
+      email: signInDto.email,
+    });
+    if (!user) {
+      throw new UnauthorizedException('User does not exists');
+    }
+
+    const apiKey = await this.apiKeyService.create(user.id);
+
+    return apiKey;
   }
 
   private async generateTokens({ id, email, role, permissions }: User) {
