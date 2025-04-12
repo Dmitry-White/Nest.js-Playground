@@ -10,9 +10,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 import { UserData } from '../../../iam/iam.types';
+import { extractFromAuthHeader } from '../../../utils/request';
 
 import { jwtConfig } from '../config/jwt.config';
 import { REQUEST_USER_KEY } from '../authentication.constants';
+import { AuthenticationType } from '../enums/authentication.enums';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -25,7 +27,7 @@ export class AccessTokenGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const token = extractFromAuthHeader(request, AuthenticationType.Bearer);
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -40,10 +42,5 @@ export class AccessTokenGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     return true;
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [, token] = request.headers.authorization?.split(' ') ?? [];
-    return token;
   }
 }

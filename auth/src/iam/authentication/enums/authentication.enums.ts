@@ -4,4 +4,9 @@ const enum AuthenticationType {
   None = 'None',
 }
 
-export { AuthenticationType };
+const enum AuthenticationEncoding {
+  Base64 = 'base64',
+  Ascii = 'ascii',
+}
+
+export { AuthenticationType, AuthenticationEncoding };
