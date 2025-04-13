@@ -132,7 +132,7 @@ export class AuthenticationService {
     return uri;
   }
 
-  private async getUser({ email, password }: OtpDto): Promise<User> {
+  async getUser({ email, password }: OtpDto): Promise<User> {
     const user = await this.usersRepository.findOneBy({
       email: email,
     });

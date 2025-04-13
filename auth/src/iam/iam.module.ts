@@ -1,8 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import Redis, { RedisOptions } from 'ioredis';
+import * as session from 'express-session';
+import * as passport from 'passport';
+import RedisStore from 'connect-redis';
 
 import { User } from '../users/entities/user.entity';
 
@@ -24,6 +28,9 @@ import { ApiKey } from './authentication/entities/api-key.entity';
 import { ApiKeyGuard } from './authentication/guards/api-keys.guard';
 import { ApiKeysService } from './authentication/api-keys/api-keys.service';
 import { OtpService } from './authentication/otp/otp.service';
+import { CACHE_CONFIG } from './authentication/authentication.constants';
+import { UserSerializer } from './authentication/serializers/user.serializer';
+import { SessionGuard } from './authentication/guards/session.guard';
 
 @Module({
   imports: [
@@ -40,6 +47,7 @@ import { OtpService } from './authentication/otp/otp.service';
     },
     AccessTokenGuard,
     ApiKeyGuard,
+    SessionGuard,
     {
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
@@ -62,6 +70,7 @@ import { OtpService } from './authentication/otp/otp.service';
     FrameworkContributorPolicyHandler,
     ApiKeysService,
     OtpService,
+    UserSerializer,
   ],
   exports: [
     {
@@ -70,4 +79,32 @@ import { OtpService } from './authentication/otp/otp.service';
     },
   ],
 })
-export class IamModule {}
+export class IamModule implements NestModule {
+  private cacheConfig: RedisOptions;
+  private sessionSecret: string;
+
+  constructor(private readonly configService: ConfigService) {
+    this.cacheConfig = this.configService.getOrThrow(CACHE_CONFIG);
+    this.sessionSecret = this.configService.getOrThrow('SESSION_SECRET');
+  }
+  configure(consumer: MiddlewareConsumer) {
+    const client = new Redis(this.cacheConfig);
+    // @ts-ignore
+    const store = new RedisStore({ client });
+
+    const options = {
+      store,
+      secret: this.sessionSecret,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        sameSite: true,
+        httpOnly: true,
+      },
+    };
+
+    consumer
+      .apply(session(options), passport.initialize(), passport.session())
+      .forRoutes('*');
+  }
+}

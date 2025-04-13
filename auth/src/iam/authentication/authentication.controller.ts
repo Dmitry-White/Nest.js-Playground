@@ -1,6 +1,7 @@
-import { Res } from '@nestjs/common';
+import { Res, Req } from '@nestjs/common';
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { Response } from 'express';
+import { promisify } from 'util';
+import { Response, Request } from 'express';
 import { toFileStream } from 'qrcode';
 
 import { Authentication } from './decorators/authentication.decorator';
@@ -35,13 +36,13 @@ export class AuthenticationController {
     return toFileStream(response, uri);
   }
 
-  @HttpCode(HttpStatus.OK) // by default @Post does 201, we wanted 200 - hence using @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   signIn(@Body() signInDto: SignInDto): Promise<TokenData> {
     return this.authenticationService.signIn(signInDto);
   }
 
-  @HttpCode(HttpStatus.OK) // by default @Post does 201, we wanted 200 - hence using @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.OK)
   @Post('sign-in-cookie')
   async signInCookie(
     @Body() signInDto: SignInDto,
@@ -56,7 +57,7 @@ export class AuthenticationController {
     });
   }
 
-  @HttpCode(HttpStatus.OK) // changed since the default is 201
+  @HttpCode(HttpStatus.OK)
   @Post('refresh-tokens')
   refreshTokens(@Body() refreshTokenDto: RefreshTokenDto): Promise<TokenData> {
     return this.authenticationService.refreshTokens(refreshTokenDto);
@@ -65,5 +66,13 @@ export class AuthenticationController {
   @Post('api-key')
   apiKey(@Body() signInDto: SignInDto): Promise<ApiKeyPayload> {
     return this.authenticationService.apiKey(signInDto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('session')
+  async session(@Req() request: Request, @Body() otpDto: OtpDto) {
+    const user = await this.authenticationService.getUser(otpDto);
+
+    await promisify(request.logIn).call(request, user);
   }
 }

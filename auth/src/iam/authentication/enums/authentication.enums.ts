@@ -1,6 +1,7 @@
 const enum AuthenticationType {
   Bearer = 'Bearer',
   ApiKey = 'ApiKey',
+  Session = 'Session',
   None = 'None',
 }
 

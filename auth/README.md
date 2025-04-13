@@ -8,6 +8,7 @@ Available Authentication methods:
 - API Key Token (Hashed Base64 UUID)
 - Cookie (Access Token, HTTP-Only)
 - 2FA (OTP)
+- Session (Passport & Redis)
 
 Available Authorization methods:
 

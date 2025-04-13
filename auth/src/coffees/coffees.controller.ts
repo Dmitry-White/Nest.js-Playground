@@ -57,4 +57,10 @@ export class CoffeesController {
   remove(@Param('id') id: string) {
     return this.coffeesService.remove(+id);
   }
+
+  @Authentication(AuthenticationType.Session)
+  @Get(':id/refresh')
+  async refresh(@ActiveUser() user: UserData) {
+    return this.coffeesService.refresh(user.email);
+  }
 }

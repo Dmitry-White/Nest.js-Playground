@@ -23,4 +23,8 @@ export class CoffeesService {
   remove(id: number) {
     return `This action removes a #${id} coffee`;
   }
+
+  refresh(email: string) {
+    return `This action refreshes coffee for ${email}.`;
+  }
 }
