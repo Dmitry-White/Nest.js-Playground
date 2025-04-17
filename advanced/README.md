@@ -10,3 +10,5 @@ Topics:
 - [Dependencies](./docs/Dependencies.md)
 - [Lazy Loading](./docs/Lazy%20Loading.md)
 - [IoC Container](./docs/IoC%20Container.md)
+- [Worker Threads](./docs/Worker%20Threads.md)
+- [Circuit Breaker](./docs/Circuit%20Breaker.md)
