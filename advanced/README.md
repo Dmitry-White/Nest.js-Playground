@@ -12,3 +12,4 @@ Topics:
 - [IoC Container](./docs/IoC%20Container.md)
 - [Worker Threads](./docs/Worker%20Threads.md)
 - [Circuit Breaker](./docs/Circuit%20Breaker.md)
+- [Module Builder](./docs/Module%20Builder.md)
