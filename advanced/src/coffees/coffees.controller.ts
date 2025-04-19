@@ -9,10 +9,14 @@ import {
   UseInterceptors,
   RequestTimeoutException,
 } from '@nestjs/common';
-import { CircuitBreakerInterceptor } from 'src/circuit-breaker/circuit-breaker.interceptor';
+
+import { CircuitBreakerInterceptor } from '../circuit-breaker/circuit-breaker.interceptor';
+import { EntityExistsPipe } from '../common/pipes/entity-exists.pipe';
+
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { Coffee } from './entities/coffee.entity';
 
 @UseInterceptors(CircuitBreakerInterceptor)
 @Controller('coffees')
@@ -36,7 +40,10 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(
+    @Param('id', EntityExistsPipe(Coffee)) id: string,
+    @Body() updateCoffeeDto: UpdateCoffeeDto,
+  ) {
     return this.coffeesService.update(+id, updateCoffeeDto);
   }
 

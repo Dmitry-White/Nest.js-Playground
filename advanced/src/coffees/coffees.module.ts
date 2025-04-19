@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CoffeesController } from './coffees.controller';
 import { COFFEES_DATA_SOURCE } from './coffees.constants';
+import { Coffee } from './entities/coffee.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 /**
  * Circular dependency with token injection.
@@ -14,12 +16,13 @@ import { COFFEES_DATA_SOURCE } from './coffees.constants';
 // export const COFFEES_DATA_SOURCE = Symbol('COFFEES_DATA_SOURCE');
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Coffee])],
   controllers: [CoffeesController],
   providers: [
     CoffeesService,
     {
       provide: COFFEES_DATA_SOURCE,
-      useValue: []
+      useValue: [],
     },
     /**
      * Using TS interfaces/types directly to inject dependencies.
