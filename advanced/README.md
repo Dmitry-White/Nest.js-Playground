@@ -13,3 +13,4 @@ Topics:
 - [Worker Threads](./docs/Worker%20Threads.md)
 - [Circuit Breaker](./docs/Circuit%20Breaker.md)
 - [Module Builder](./docs/Module%20Builder.md)
+- [Mixins](./docs/Mixins.md)

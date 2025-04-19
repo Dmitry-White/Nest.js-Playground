@@ -1,1 +1,3 @@
-export class Coffee {}
+export class Coffee {
+  constructor(public name: string) {}
+}
