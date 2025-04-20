@@ -9,6 +9,7 @@ import { HttpClientModule } from './http-client/http-client.module';
 import { RewardsModule } from './rewards/rewards.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
 import { ThreadsModule } from './threads/threads.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ThreadsModule } from './threads/threads.module';
         synchronize: true,
       }),
     }),
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

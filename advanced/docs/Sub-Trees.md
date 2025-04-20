@@ -9,4 +9,8 @@ Although this graph is statically scoped and doesn't get recreated over time, me
 
 Request-scope providers get instanciated dynamically upon receiving a signal, e.g. HTTP request, CronJob invocation, etc. In reaction to this signal, Nest.js constructs a so-called dependency injection sub-tree that's associated with the given signal.
 
-`ModuleRef` is the way to manually construct and manage custom dependency injection sub-trees
+## ModuleRef
+
+`ModuleRef` is the way to manually construct and manage custom dependency injection sub-trees.
+
+What the ModuleRef.resolve method does under the hood is that it internally constructs a dedicated depenency injection sub-tree where the target service in the argument for the method is the root node of that sub-tree. This sub-tree has its own unique context identifier that represents that tree
