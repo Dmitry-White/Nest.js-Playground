@@ -14,3 +14,5 @@ Topics:
 - [Circuit Breaker](./docs/Circuit%20Breaker.md)
 - [Module Builder](./docs/Module%20Builder.md)
 - [Mixins](./docs/Mixins.md)
+- [Schematics](./docs/Schematics.md)
+- [Sub-Trees](./docs/Sub-Trees.md)
