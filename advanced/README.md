@@ -16,3 +16,4 @@ Topics:
 - [Mixins](./docs/Mixins.md)
 - [Schematics](./docs/Schematics.md)
 - [Sub-Trees](./docs/Sub-Trees.md)
+- [Durable Providers](./docs/Durable%20Providers.md)
