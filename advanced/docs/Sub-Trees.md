@@ -13,4 +13,10 @@ Request-scope providers get instanciated dynamically upon receiving a signal, e.
 
 `ModuleRef` is the way to manually construct and manage custom dependency injection sub-trees.
 
-What the ModuleRef.resolve method does under the hood is that it internally constructs a dedicated depenency injection sub-tree where the target service in the argument for the method is the root node of that sub-tree. This sub-tree has its own unique context identifier that represents that tree
+What the ModuleRef.resolve method does under the hood is that it internally constructs a dedicated depenency injection sub-tree where the target service in the argument for the method is the root node of that sub-tree. This sub-tree has its own unique context identifier that represents that tree.
+
+One of the ways to use these sub-trees and avoid making everything request scoped is to use events.
+
+`@nestjs/event-emitter` package is built on top of Node.js EventEmitter using Observables. Event subscribers can't be request scoped by definition, since Nest.js can't really track down what service controller triggered the event, as that would be against loose coupling capabilities the events provide.
+
+Therefore, `ModuleRef` is an ideal choice for cases where request scoped capabilities must co-exist with loose coupling.
