@@ -27,4 +27,11 @@ The most common use case for multi-tenant systems are SaaS based applications wh
   - Medium Provision & Management cost;
   - Needs specific security measures for a few high-value tenants;
 
+## Functionality
+
 If app's providers don't rely on any property that's truly unique for each consecutive request, like UUIDs, but instead there are some specific attributes that allow aggregation on, then there's no reason to recreate a DI subtree on every incoming request - an ideal use case for `Durable Providers`.
+
+`Durable Providers` are similar to `Request Scoped Providers` as they are both dynamic. The difference is that request scoped providers by default are instanciated per each request, while with durable providers, we can control under which conditions they become durable.
+Durable providers are just a sub-type of request scoped providers with one essential difference - while request scoped providers are tied to the Request lifecycle, durable providers life cycle can be controlled and managed by developers.
+
+Similar to Request Scoped providers durability bubbles up (hoists) through the injection chain as well.

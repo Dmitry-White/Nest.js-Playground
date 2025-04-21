@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ContextIdFactory } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -12,6 +13,10 @@ import { SchedulerModule } from './scheduler/scheduler.module';
 import { ThreadsModule } from './threads/threads.module';
 import { TagsModule } from './tags/tags.module';
 import { PaymentsModule } from './payments/payments.module';
+import { UsersModule } from './users/users.module';
+import { AggregateByTenantContextIdStrategy } from './common/strategies/aggregate-by-tenant.strategy';
+
+ContextIdFactory.apply(new AggregateByTenantContextIdStrategy());
 
 @Module({
   imports: [
@@ -38,6 +43,7 @@ import { PaymentsModule } from './payments/payments.module';
     ThreadsModule,
     TagsModule,
     PaymentsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
