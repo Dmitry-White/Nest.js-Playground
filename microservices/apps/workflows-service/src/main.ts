@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 
-import { WorkflowsServiceModule } from './workflows-service.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(WorkflowsServiceModule);
-  await app.listen(process.env.port ?? 3001);
+  const app = await NestFactory.create(AppModule);
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
