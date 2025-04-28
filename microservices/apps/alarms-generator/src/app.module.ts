@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -8,6 +8,7 @@ import { ALARMS_SERVICE } from './app.constants';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     ClientsModule.registerAsync([
       {
@@ -23,6 +24,6 @@ import { ALARMS_SERVICE } from './app.constants';
       },
     ]),
   ],
-  providers: [AppService],
+  providers: [Logger, AppService],
 })
 export class AppModule {}

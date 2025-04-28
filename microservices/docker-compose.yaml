@@ -4,7 +4,6 @@ services:
     container_name: ${VF_APP_NAME}
     depends_on:
       - ${VF_APP_NAME}-db
-      - ${WS_APP_NAME}
       - ${NATS_HOST}
     networks:
       - shared-network
@@ -19,9 +18,6 @@ services:
       - ./package.json:/usr/src/app/package.json
       - ./tsconfig.json:/usr/src/app/tsconfig.json
       - ./apps/${VF_APP_NAME}:/usr/src/app/apps/${VF_APP_NAME}
-      # Note: This is usually not a good practice to mount the "node_modules" directory on the host to the container
-      # We are doing this for the sake of simplicity in this example
-      #- ./node_modules:/usr/src/app/node_modules
     ports:
       - 3000:3000
     command: npm run start:dev -- ${VF_APP_NAME}
@@ -65,9 +61,6 @@ services:
       - ./package.json:/usr/src/app/package.json
       - ./tsconfig.json:/usr/src/app/tsconfig.json
       - ./apps/${WS_APP_NAME}:/usr/src/app/apps/${WS_APP_NAME}
-      # Note: This is usually not a good practice to mount the "node_modules" directory on the host to the container
-      # We are doing this for the sake of simplicity in this example
-      #- ./node_modules:/usr/src/app/node_modules
     command: npm run start:dev -- ${WS_APP_NAME}
     environment:
       - APP_NAME=${WS_APP_NAME}
@@ -96,6 +89,51 @@ services:
     networks:
       - shared-network
 
+  alarms-generator:
+    hostname: ${AG_APP_NAME}
+    container_name: ${AG_APP_NAME}
+    depends_on:
+      - ${NATS_HOST}
+    networks:
+      - shared-network
+      - alarms-network
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - APP_NAME=${AG_APP_NAME}
+    volumes:
+      - ./libs:/usr/src/app/libs
+      - ./package.json:/usr/src/app/package.json
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      - ./apps/${AG_APP_NAME}:/usr/src/app/apps/${AG_APP_NAME}
+    command: npm run start:dev -- ${AG_APP_NAME}
+    environment:
+      - APP_NAME=${AG_APP_NAME}
+      - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
+
+  alarms-service:
+    hostname: ${AS_APP_NAME}
+    container_name: ${AS_APP_NAME}
+    depends_on:
+      - ${NATS_HOST}
+    networks:
+      - shared-network
+      - alarms-network
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - APP_NAME=${AS_APP_NAME}
+    volumes:
+      - ./libs:/usr/src/app/libs
+      - ./package.json:/usr/src/app/package.json
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      - ./apps/${AS_APP_NAME}:/usr/src/app/apps/${AS_APP_NAME}
+    command: npm run start:dev -- ${AS_APP_NAME}
+    environment:
+      - APP_NAME=${AS_APP_NAME}
+      - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
 
 networks:
   virtual-facility-network:
@@ -106,4 +144,7 @@ networks:
     driver: bridge
   shared-network:
     name: shared-network
+    driver: bridge
+  alarms-network:
+    name: alarms-network
     driver: bridge
