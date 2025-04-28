@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
@@ -27,6 +27,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ]),
   ],
   controllers: [BuildingsController],
-  providers: [BuildingsService],
+  providers: [Logger, BuildingsService],
 })
 export class BuildingsModule {}

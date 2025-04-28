@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Workflow } from './entities/workflow.entity';
@@ -8,6 +8,6 @@ import { WorkflowsService } from './workflows.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Workflow])],
   controllers: [WorkflowsController],
-  providers: [WorkflowsService],
+  providers: [Logger, WorkflowsService],
 })
 export class WorkflowsModule {}

@@ -1,5 +1,5 @@
 import { CreateWorkflowDto, EVENTS } from '@app/workflows';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClientProxy } from '@nestjs/microservices';
 import { Repository } from 'typeorm';
@@ -14,6 +14,8 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class BuildingsService {
   constructor(
+    private readonly logger: Logger,
+
     @InjectRepository(Building)
     private readonly buildingsRepository: Repository<Building>,
 
@@ -71,7 +73,7 @@ export class BuildingsService {
         buildingId,
       } as CreateWorkflowDto),
     );
-    console.log({ newWorkflow });
+    this.logger.log({ newWorkflow });
     return newWorkflow;
   }
 }
