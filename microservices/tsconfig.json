@@ -18,8 +18,18 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/workflows": ["libs/workflows/src"],
-      "@app/workflows/*": ["libs/workflows/src/*"]
+      "@app/health": [
+        "libs/health/src"
+      ],
+      "@app/health/*": [
+        "libs/health/src/*"
+      ],
+      "@app/workflows": [
+        "libs/workflows/src"
+      ],
+      "@app/workflows/*": [
+        "libs/workflows/src/*"
+      ]
     }
   }
 }

@@ -1,3 +1,4 @@
+import { HealthModule } from '@app/health';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -23,6 +24,7 @@ import { BuildingsModule } from './buildings/buildings.module';
         synchronize: true,
       }),
     }),
+    HealthModule,
     BuildingsModule,
   ],
   controllers: [AppController],

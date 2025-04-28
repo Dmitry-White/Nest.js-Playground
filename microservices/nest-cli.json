@@ -10,6 +10,15 @@
   "monorepo": true,
   "root": "apps/virtual-facility",
   "projects": {
+    "health": {
+      "type": "library",
+      "root": "libs/health",
+      "entryFile": "index",
+      "sourceRoot": "libs/health/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/health/tsconfig.lib.json"
+      }
+    },
     "virtual-facility": {
       "type": "application",
       "root": "apps/virtual-facility",
