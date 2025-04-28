@@ -30,9 +30,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=${VF_APP_NAME}-db
       - POSTGRES_DB=${VF_APP_NAME}
+      - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
 
   virtual-facility-db:
-    image: postgres:13.2-alpine
+    image: postgres:latest
     hostname: ${VF_APP_NAME}-db
     container_name: ${VF_APP_NAME}-db
     networks:
@@ -70,9 +71,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=${WS_APP_NAME}-db
       - POSTGRES_DB=${WS_APP_NAME}
+      - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
 
   workflows-service-db:
-    image: postgres:13.2-alpine
+    image: postgres:latest
     hostname: ${WS_APP_NAME}-db
     container_name: ${WS_APP_NAME}-db
     networks:
@@ -81,6 +83,11 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${WS_APP_NAME}
+
+  nats:
+    image: nats:latest
+    hostname: ${NATS_HOST}
+    container_name: ${NATS_HOST}
 
 
 networks:
