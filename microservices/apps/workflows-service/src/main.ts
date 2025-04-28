@@ -1,11 +1,30 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(process.env.PORT ?? 3001);
+
+  const configService = await app.resolve(ConfigService);
+  const natsServer = configService.getOrThrow('NATS_URL');
+  const port = configService.get('PORT');
+
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.NATS,
+      options: {
+        servers: natsServer,
+      },
+    },
+    { inheritAppConfig: true },
+  );
+  await app.startAllMicroservices();
+
+  await app.listen(port ?? 3001);
 }
 bootstrap();

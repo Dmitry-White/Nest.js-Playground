@@ -5,6 +5,7 @@ services:
     depends_on:
       - ${VF_APP_NAME}-db
       - ${WS_APP_NAME}
+      - ${NATS_HOST}
     networks:
       - shared-network
       - virtual-facility-network
@@ -48,6 +49,7 @@ services:
     container_name: ${WS_APP_NAME}
     depends_on:
       - ${WS_APP_NAME}-db
+      - ${NATS_HOST}
     networks:
       - shared-network
       - workflows-service-network
@@ -88,6 +90,8 @@ services:
     image: nats:latest
     hostname: ${NATS_HOST}
     container_name: ${NATS_HOST}
+    networks:
+      - shared-network
 
 
 networks:
