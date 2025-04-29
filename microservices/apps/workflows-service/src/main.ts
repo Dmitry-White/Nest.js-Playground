@@ -11,16 +11,14 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const configService = await app.resolve(ConfigService);
-  const natsServer = configService.getOrThrow('NATS_URL');
-  const appName = configService.getOrThrow('APP_NAME');
+  const mqServer = configService.getOrThrow('RABBITMQ_URL');
   const port = configService.get('PORT');
 
   app.connectMicroservice<MicroserviceOptions>(
     {
-      transport: Transport.NATS,
+      transport: Transport.RMQ,
       options: {
-        servers: natsServer,
-        queue: appName,
+        urls: mqServer,
       },
     },
     { inheritAppConfig: true },

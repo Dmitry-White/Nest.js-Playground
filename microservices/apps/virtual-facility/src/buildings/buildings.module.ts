@@ -17,9 +17,9 @@ import { Building } from './entities/building.entity';
         inject: [ConfigService],
         name: MESSAGE_BROKER,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.NATS,
+          transport: Transport.RMQ,
           options: {
-            servers: configService.getOrThrow('NATS_URL'),
+            urls: configService.getOrThrow('RABBITMQ_URL'),
           },
         }),
       },
