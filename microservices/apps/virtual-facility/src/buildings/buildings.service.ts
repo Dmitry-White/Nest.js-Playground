@@ -1,15 +1,13 @@
-import { CreateWorkflowDto, EVENTS } from '@app/workflows';
+import { CreateWorkflowDto, EVENTS, MESSAGE_BROKER } from '@app/workflows';
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClientProxy } from '@nestjs/microservices';
 import { Repository } from 'typeorm';
-
-import { WORKFLOWS_SERVICE } from '../app.constants';
+import { lastValueFrom } from 'rxjs';
 
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { Building } from './entities/building.entity';
-import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class BuildingsService {
@@ -19,8 +17,8 @@ export class BuildingsService {
     @InjectRepository(Building)
     private readonly buildingsRepository: Repository<Building>,
 
-    @Inject(WORKFLOWS_SERVICE)
-    private readonly workflowsService: ClientProxy,
+    @Inject(MESSAGE_BROKER)
+    private readonly messageBroker: ClientProxy,
   ) {}
 
   async findAll(): Promise<Building[]> {
@@ -68,7 +66,7 @@ export class BuildingsService {
 
   async createWorkflow(buildingId: number) {
     const newWorkflow = await lastValueFrom(
-      this.workflowsService.send(EVENTS.WORKFLOW_CREATE, {
+      this.messageBroker.send(EVENTS.WORKFLOW_CREATE, {
         name: 'My Workflow',
         buildingId,
       } as CreateWorkflowDto),

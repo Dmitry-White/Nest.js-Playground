@@ -5,4 +5,6 @@ enum EVENTS {
   NOTIFICATION_SEND = 'notification.send',
 }
 
-export { EVENTS };
+const MESSAGE_BROKER = Symbol('message-broker');
+
+export { EVENTS, MESSAGE_BROKER };

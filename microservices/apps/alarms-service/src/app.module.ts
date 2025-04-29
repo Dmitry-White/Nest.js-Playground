@@ -1,11 +1,30 @@
+import { MESSAGE_BROKER } from '@app/workflows';
 import { Logger, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppController } from './app.controller';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [
+    ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
+    ClientsModule.registerAsync([
+      {
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        name: MESSAGE_BROKER,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.NATS,
+          options: {
+            servers: configService.getOrThrow('NATS_URL'),
+          },
+        }),
+      },
+    ]),
+  ],
   controllers: [AppController],
   providers: [Logger, AppService],
 })

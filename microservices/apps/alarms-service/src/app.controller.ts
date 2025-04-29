@@ -14,7 +14,7 @@ export class AppController {
   }
 
   @EventPattern(EVENTS.ALARM_CREATE)
-  create(@Payload() data: unknown) {
+  create(@Payload() data: { name: string; buildingId: number }) {
     return this.appService.create(data);
   }
 }
