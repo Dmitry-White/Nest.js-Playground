@@ -158,15 +158,37 @@ services:
       - APP_NAME=${AC_APP_NAME}
       - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
 
+  notifications-service:
+    hostname: ${NS_APP_NAME}
+    container_name: ${NS_APP_NAME}
+    depends_on:
+      - ${NATS_HOST}
+    networks:
+      - shared-network
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - APP_NAME=${NS_APP_NAME}
+    volumes:
+      - ./libs:/usr/src/app/libs
+      - ./package.json:/usr/src/app/package.json
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      - ./apps/${NS_APP_NAME}:/usr/src/app/apps/${NS_APP_NAME}
+    command: npm run start:dev -- ${NS_APP_NAME}
+    environment:
+      - APP_NAME=${NS_APP_NAME}
+      - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
+
 networks:
+  shared-network:
+    name: shared-network
+    driver: bridge
   virtual-facility-network:
     name: virtual-facility-network
     driver: bridge
   workflows-service-network:
     name: workflows-service-network
-    driver: bridge
-  shared-network:
-    name: shared-network
     driver: bridge
   alarms-network:
     name: alarms-network

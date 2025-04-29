@@ -46,6 +46,15 @@
         "tsConfigPath": "libs/health/tsconfig.lib.json"
       }
     },
+    "notifications-service": {
+      "type": "application",
+      "root": "apps/notifications-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/notifications-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notifications-service/tsconfig.app.json"
+      }
+    },
     "virtual-facility": {
       "type": "application",
       "root": "apps/virtual-facility",
