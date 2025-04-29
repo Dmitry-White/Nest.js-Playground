@@ -135,6 +135,29 @@ services:
       - APP_NAME=${AS_APP_NAME}
       - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
 
+  alarms-classifier:
+    hostname: ${AC_APP_NAME}
+    container_name: ${AC_APP_NAME}
+    depends_on:
+      - ${NATS_HOST}
+    networks:
+      - shared-network
+      - alarms-network
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - APP_NAME=${AC_APP_NAME}
+    volumes:
+      - ./libs:/usr/src/app/libs
+      - ./package.json:/usr/src/app/package.json
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      - ./apps/${AC_APP_NAME}:/usr/src/app/apps/${AC_APP_NAME}
+    command: npm run start:dev -- ${AC_APP_NAME}
+    environment:
+      - APP_NAME=${AC_APP_NAME}
+      - NATS_URL=nats://${NATS_HOST}:${NATS_PORT}
+
 networks:
   virtual-facility-network:
     name: virtual-facility-network

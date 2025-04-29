@@ -10,6 +10,15 @@
   "monorepo": true,
   "root": "apps/virtual-facility",
   "projects": {
+    "alarms-classifier": {
+      "type": "application",
+      "root": "apps/alarms-classifier",
+      "entryFile": "main",
+      "sourceRoot": "apps/alarms-classifier/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/alarms-classifier/tsconfig.app.json"
+      }
+    },
     "alarms-generator": {
       "type": "application",
       "root": "apps/alarms-generator",
