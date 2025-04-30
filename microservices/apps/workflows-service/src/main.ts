@@ -12,6 +12,7 @@ async function bootstrap() {
 
   const configService = await app.resolve(ConfigService);
   const mqServer = configService.getOrThrow('RABBITMQ_URL');
+  const appName = configService.getOrThrow('APP_NAME');
   const port = configService.get('PORT');
 
   app.connectMicroservice<MicroserviceOptions>(
@@ -19,6 +20,7 @@ async function bootstrap() {
       transport: Transport.RMQ,
       options: {
         urls: mqServer,
+        queue: appName,
       },
     },
     { inheritAppConfig: true },

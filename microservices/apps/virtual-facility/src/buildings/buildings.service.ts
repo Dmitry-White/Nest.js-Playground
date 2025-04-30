@@ -1,13 +1,14 @@
-import { CreateWorkflowDto, EVENTS, MESSAGE_BROKER } from '@app/workflows';
+import { CreateWorkflowDto, EVENTS, MESSAGE_BROKER } from '@app/core';
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClientProxy } from '@nestjs/microservices';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { lastValueFrom } from 'rxjs';
 
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { Building } from './entities/building.entity';
+import { Outbox } from '@app/outbox';
 
 @Injectable()
 export class BuildingsService {
@@ -19,6 +20,11 @@ export class BuildingsService {
 
     @Inject(MESSAGE_BROKER)
     private readonly messageBroker: ClientProxy,
+
+    private readonly dataSource: DataSource,
+
+    @InjectRepository(Outbox)
+    private readonly outboxRepository: Repository<Outbox>,
   ) {}
 
   async findAll(): Promise<Building[]> {
@@ -34,14 +40,38 @@ export class BuildingsService {
   }
 
   async create(createBuildingDto: CreateBuildingDto): Promise<Building> {
-    const building = this.buildingsRepository.create({
-      ...createBuildingDto,
-    });
-    const newBuildingEntity = await this.buildingsRepository.save(building);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    // Create a workflow for the new building
-    await this.createWorkflow(newBuildingEntity.id);
-    return newBuildingEntity;
+    const buildingsRepository = queryRunner.manager.getRepository(Building);
+    const outboxRepository = queryRunner.manager.getRepository(Outbox);
+
+    try {
+      const building = buildingsRepository.create({
+        ...createBuildingDto,
+      });
+      const newBuildingEntity = await buildingsRepository.save(building);
+      this.logger.log("Building: ", newBuildingEntity);
+
+      await outboxRepository.save({
+        type: EVENTS.WORKFLOW_CREATE,
+        payload: {
+          name: 'My workflow',
+          buildingId: building.id,
+        },
+        target: MESSAGE_BROKER.description,
+      });
+
+      await queryRunner.commitTransaction();
+
+      return newBuildingEntity;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async update(

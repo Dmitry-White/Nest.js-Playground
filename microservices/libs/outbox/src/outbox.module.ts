@@ -1,17 +1,18 @@
 import { MESSAGE_BROKER } from '@app/core';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
-import { BuildingsController } from './buildings.controller';
-import { BuildingsService } from './buildings.service';
-import { Building } from './entities/building.entity';
-import { Outbox } from '@app/outbox';
+import { Outbox } from './outbox.entity';
+import { OutboxService } from './outbox.service';
+import { OutboxProcessor } from './outbox.processor';
+import { OutboxSubscriber } from './outbox.subscriber';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Building, Outbox]),
+    ConfigModule.forRoot(),
+    TypeOrmModule.forFeature([Outbox]),
     ClientsModule.registerAsync([
       {
         imports: [ConfigModule],
@@ -21,12 +22,12 @@ import { Outbox } from '@app/outbox';
           transport: Transport.RMQ,
           options: {
             urls: configService.getOrThrow('RABBITMQ_URL'),
+            queue: configService.getOrThrow('RABBITMQ_QUEUE'),
           },
         }),
       },
     ]),
   ],
-  controllers: [BuildingsController],
-  providers: [Logger, BuildingsService],
+  providers: [OutboxService, OutboxProcessor, OutboxSubscriber],
 })
-export class BuildingsModule {}
+export class OutboxModule {}

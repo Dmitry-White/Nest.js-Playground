@@ -29,6 +29,7 @@ services:
       - POSTGRES_HOST=${VF_APP_NAME}-db
       - POSTGRES_DB=${VF_APP_NAME}
       - RABBITMQ_URL=amqp://${RABBITMQ_HOST}:${RABBITMQ_PORT}
+      - RABBITMQ_QUEUE=${WS_APP_NAME}
 
   virtual-facility-db:
     image: postgres:latest
