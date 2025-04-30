@@ -21,6 +21,7 @@ async function bootstrap() {
       options: {
         urls: mqServer,
         queue: appName,
+        noAck: false,
       },
     },
     { inheritAppConfig: true },

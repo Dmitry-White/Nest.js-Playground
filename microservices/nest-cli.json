@@ -37,6 +37,15 @@
         "tsConfigPath": "apps/alarms-service/tsconfig.app.json"
       }
     },
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
     "health": {
       "type": "library",
       "root": "libs/health",
@@ -44,6 +53,15 @@
       "sourceRoot": "libs/health/src",
       "compilerOptions": {
         "tsConfigPath": "libs/health/tsconfig.lib.json"
+      }
+    },
+    "inbox": {
+      "type": "library",
+      "root": "libs/inbox",
+      "entryFile": "index",
+      "sourceRoot": "libs/inbox/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/inbox/tsconfig.lib.json"
       }
     },
     "notifications-service": {
@@ -71,15 +89,6 @@
       "sourceRoot": "apps/virtual-facility/src",
       "compilerOptions": {
         "tsConfigPath": "apps/virtual-facility/tsconfig.app.json"
-      }
-    },
-    "core": {
-      "type": "library",
-      "root": "libs/core",
-      "entryFile": "index",
-      "sourceRoot": "libs/core/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/core/tsconfig.lib.json"
       }
     },
     "workflows-service": {

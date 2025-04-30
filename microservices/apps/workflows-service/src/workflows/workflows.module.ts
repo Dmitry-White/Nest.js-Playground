@@ -1,3 +1,5 @@
+import { TARGET_REPOSITORY } from '@app/core';
+import { Inbox, InboxModule, InboxProcessor } from '@app/inbox';
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -6,8 +8,16 @@ import { WorkflowsController } from './workflows.controller';
 import { WorkflowsService } from './workflows.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Workflow])],
+  imports: [TypeOrmModule.forFeature([Workflow, Inbox]), InboxModule],
   controllers: [WorkflowsController],
-  providers: [Logger, WorkflowsService],
+  providers: [
+    Logger,
+    WorkflowsService,
+    InboxProcessor,
+    {
+      provide: TARGET_REPOSITORY,
+      useClass: WorkflowsService,
+    },
+  ],
 })
 export class WorkflowsModule {}

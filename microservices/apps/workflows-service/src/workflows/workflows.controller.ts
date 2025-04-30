@@ -1,6 +1,14 @@
 import { CreateWorkflowDto, EVENTS, UpdateWorkflowDto } from '@app/core';
-import { Controller, Get, Body, Patch, Param, Delete, Logger } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Logger,
+} from '@nestjs/common';
+import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
 
 import { WorkflowsService } from './workflows.service';
 
@@ -8,12 +16,21 @@ import { WorkflowsService } from './workflows.service';
 export class WorkflowsController {
   constructor(
     private readonly logger: Logger,
-    private readonly workflowsService: WorkflowsService) {}
+    private readonly workflowsService: WorkflowsService,
+  ) {}
 
-  @MessagePattern(EVENTS.WORKFLOW_CREATE)
-  create(@Payload() createWorkflowDto: CreateWorkflowDto) {
-    this.logger.log(createWorkflowDto);
-    return this.workflowsService.create(createWorkflowDto);
+  @EventPattern(EVENTS.WORKFLOW_CREATE)
+  async create(
+    @Payload() createWorkflowDto: CreateWorkflowDto,
+    @Ctx() context: RmqContext,
+  ) {
+    const message = context.getMessage();
+    const pattern = context.getPattern();
+
+    await this.workflowsService.inboxSave(createWorkflowDto, message, pattern);
+
+    const channel = context.getChannelRef();
+    channel.ack(message);
   }
 
   @Get()

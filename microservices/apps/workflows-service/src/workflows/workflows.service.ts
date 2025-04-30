@@ -1,5 +1,6 @@
 import { CreateWorkflowDto, UpdateWorkflowDto } from '@app/core';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inbox, InboxService } from '@app/inbox';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -8,8 +9,12 @@ import { Workflow } from './entities/workflow.entity';
 @Injectable()
 export class WorkflowsService {
   constructor(
+    private readonly logger: Logger,
+
     @InjectRepository(Workflow)
     private readonly workflowsRepository: Repository<Workflow>,
+
+    private readonly inboxService: InboxService,
   ) {}
 
   async findAll(): Promise<Workflow[]> {
@@ -30,6 +35,24 @@ export class WorkflowsService {
     });
     const newWorkflowEntity = await this.workflowsRepository.save(workflow);
     return newWorkflowEntity;
+  }
+
+  async inboxSave(
+    createWorkflowDto: CreateWorkflowDto,
+    message: Record<string, any>,
+    pattern: string,
+  ) {
+    await this.inboxService.save(createWorkflowDto, message, pattern);
+  }
+
+  async process(message: Inbox): Promise<void> {
+    const workflow = this.workflowsRepository.create({
+      ...message.payload,
+    });
+    const newWorkflowEntity = await this.workflowsRepository.save(workflow);
+    this.logger.debug(
+      `Created workflow with id ${newWorkflowEntity.id} for building ${newWorkflowEntity.buildingId}`,
+    );
   }
 
   async update(

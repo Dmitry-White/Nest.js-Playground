@@ -18,12 +18,30 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/core": ["libs/core/src"],
-      "@app/core/*": ["libs/core/src/*"],
-      "@app/health": ["libs/health/src"],
-      "@app/health/*": ["libs/health/src/*"],
-      "@app/outbox": ["libs/outbox/src"],
-      "@app/outbox/*": ["libs/outbox/src/*"],
+      "@app/core": [
+        "libs/core/src"
+      ],
+      "@app/core/*": [
+        "libs/core/src/*"
+      ],
+      "@app/health": [
+        "libs/health/src"
+      ],
+      "@app/health/*": [
+        "libs/health/src/*"
+      ],
+      "@app/inbox": [
+        "libs/inbox/src"
+      ],
+      "@app/inbox/*": [
+        "libs/inbox/src/*"
+      ],
+      "@app/outbox": [
+        "libs/outbox/src"
+      ],
+      "@app/outbox/*": [
+        "libs/outbox/src/*"
+      ]
     }
   }
 }
