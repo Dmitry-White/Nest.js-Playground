@@ -7,7 +7,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { BuildingsController } from './buildings.controller';
 import { BuildingsService } from './buildings.service';
 import { Building } from './entities/building.entity';
-import { Outbox } from '@app/outbox';
+import { Outbox, OutboxModule } from '@app/outbox';
 
 @Module({
   imports: [
@@ -25,6 +25,7 @@ import { Outbox } from '@app/outbox';
         }),
       },
     ]),
+    OutboxModule,
   ],
   controllers: [BuildingsController],
   providers: [Logger, BuildingsService],

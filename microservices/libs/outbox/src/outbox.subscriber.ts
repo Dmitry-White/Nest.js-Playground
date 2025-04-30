@@ -22,7 +22,7 @@ export class OutboxSubscriber implements EntitySubscriberInterface<Outbox> {
   }
 
   async afterInsert(event: InsertEvent<Outbox>) {
-    await this.outboxProcessor.dispatchWorkflowEvent(event.entity);
+    await this.outboxProcessor.dispatchOutboxEvent(event.entity);
     await event.manager.delete(Outbox, event.entity.id);
   }
 }

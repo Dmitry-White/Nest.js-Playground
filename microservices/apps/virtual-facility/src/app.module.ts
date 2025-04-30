@@ -1,5 +1,4 @@
 import { HealthModule } from '@app/health';
-import { OutboxModule } from '@app/outbox';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -29,7 +28,6 @@ import { BuildingsModule } from './buildings/buildings.module';
     }),
     HealthModule,
     BuildingsModule,
-    OutboxModule,
   ],
   controllers: [AppController],
   providers: [AppService],

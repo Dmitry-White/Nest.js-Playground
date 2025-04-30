@@ -6,5 +6,11 @@ enum EVENTS {
 }
 
 const MESSAGE_BROKER = Symbol('message-broker');
+const TARGET_REPOSITORY = Symbol('target-repository');
 
-export { EVENTS, MESSAGE_BROKER };
+enum MESSAGE_STATUS {
+  PENDING = 'pending',
+  PROCESSED = 'processed',
+}
+
+export { EVENTS, MESSAGE_BROKER, TARGET_REPOSITORY, MESSAGE_STATUS };

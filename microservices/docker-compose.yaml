@@ -37,8 +37,6 @@ services:
     container_name: ${VF_APP_NAME}-db
     networks:
       - virtual-facility-network
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -80,6 +78,8 @@ services:
     container_name: ${WS_APP_NAME}-db
     networks:
       - workflows-service-network
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

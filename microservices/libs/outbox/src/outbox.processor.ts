@@ -41,14 +41,14 @@ export class OutboxProcessor {
     await Promise.all(messages.map(this.processOutboxMessage));
   }
 
-  async dispatchWorkflowEvent(outbox: Outbox) {
+  async dispatchOutboxEvent(outbox: Outbox) {
     const event$ = this.messageBroker.emit(outbox.type, outbox.payload);
 
     await lastValueFrom(event$);
   }
 
   private processOutboxMessage = async (message: Outbox) => {
-    await this.dispatchWorkflowEvent(message);
+    await this.dispatchOutboxEvent(message);
     // Instead of removing the message from the database, we could also update the message status to "processed".
     // However, for simplicity sake, we'll just remove the message from the database.
     await this.outboxRepository.delete(message.id);

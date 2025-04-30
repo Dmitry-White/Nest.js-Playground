@@ -1,5 +1,5 @@
 import { MESSAGE_BROKER } from '@app/core';
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -28,6 +28,6 @@ import { OutboxSubscriber } from './outbox.subscriber';
       },
     ]),
   ],
-  providers: [OutboxService, OutboxProcessor, OutboxSubscriber],
+  providers: [Logger, OutboxService, OutboxProcessor, OutboxSubscriber],
 })
 export class OutboxModule {}
