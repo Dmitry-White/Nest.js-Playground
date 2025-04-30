@@ -18,18 +18,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/health": [
-        "libs/health/src"
-      ],
-      "@app/health/*": [
-        "libs/health/src/*"
-      ],
-      "@app/workflows": [
-        "libs/workflows/src"
-      ],
-      "@app/workflows/*": [
-        "libs/workflows/src/*"
-      ]
+      "@app/core": ["libs/core/src"],
+      "@app/core/*": ["libs/core/src/*"],
+      "@app/health": ["libs/health/src"],
+      "@app/health/*": ["libs/health/src/*"],
+      "@app/outbox": ["libs/outbox/src"],
+      "@app/outbox/*": ["libs/outbox/src/*"],
     }
   }
 }

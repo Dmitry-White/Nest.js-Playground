@@ -1,4 +1,4 @@
-import { CreateWorkflowDto, EVENTS, UpdateWorkflowDto } from '@app/workflows';
+import { CreateWorkflowDto, EVENTS, UpdateWorkflowDto } from '@app/core';
 import { Controller, Get, Body, Patch, Param, Delete, Logger } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 

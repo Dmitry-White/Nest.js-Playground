@@ -1,4 +1,4 @@
-import { MESSAGE_BROKER } from '@app/workflows';
+import { MESSAGE_BROKER } from '@app/core';
 import { Logger, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ClientsModule, Transport } from '@nestjs/microservices';

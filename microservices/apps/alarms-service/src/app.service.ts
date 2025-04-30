@@ -1,4 +1,4 @@
-import { EVENTS, MESSAGE_BROKER } from '@app/workflows';
+import { EVENTS, MESSAGE_BROKER } from '@app/core';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';

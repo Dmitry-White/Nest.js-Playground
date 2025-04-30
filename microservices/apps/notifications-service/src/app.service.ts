@@ -1,4 +1,4 @@
-import { EVENTS } from '@app/workflows';
+import { EVENTS } from '@app/core';
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()

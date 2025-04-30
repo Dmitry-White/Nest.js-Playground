@@ -36,6 +36,8 @@ services:
     container_name: ${VF_APP_NAME}-db
     networks:
       - virtual-facility-network
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -90,11 +92,13 @@ services:
       - shared-network
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:management
     hostname: ${RABBITMQ_HOST}
     container_name: ${RABBITMQ_HOST}
     networks:
       - shared-network
+    ports:
+      - ${RABBITMQ_UI_PORT}:${RABBITMQ_UI_PORT}
 
   alarms-generator:
     hostname: ${AG_APP_NAME}

@@ -1,4 +1,4 @@
-import { EVENTS } from '@app/workflows';
+import { EVENTS } from '@app/core';
 import { Controller, Get } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 
