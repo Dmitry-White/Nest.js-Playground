@@ -10,6 +10,7 @@ Folder Structure:
 Other Components:
 
 - Value Objects
+- Ports & Adapters
 
 ## Application
 
@@ -34,3 +35,8 @@ Sometimes this folder is also called the user-interface folder, sometimes - just
 
 An immutable side-effect-free object that represents a descriptive aspect of the domain with no conceptual identity and originates from Domain Driven Design (DDD).
 Two value objects are equal when they have the same value, not necessarily being the same object.
+
+## Ports & Adapters
+
+Ports define the contract for interactions with the external world.
+Adapters implement these contracts and serve as a bridge between the application layer and the external systems.
